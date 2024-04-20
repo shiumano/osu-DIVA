@@ -34,10 +34,10 @@ namespace osu.Game.Rulesets.Diva.UI
 
         private Container mainContent = null!;
 
-        private DrumSegment leftCentre = null!;
-        private DrumSegment rightCentre = null!;
-        private DrumSegment leftRim = null!;
-        private DrumSegment rightRim = null!;
+        private ArcadeButton circle = null!;
+        private ArcadeButton cross = null!;
+        private ArcadeButton square = null!;
+        private ArcadeButton triangle = null!;
 
         private readonly Bindable<DivaTouchControlScheme> configTouchControlScheme = new Bindable<DivaTouchControlScheme>();
 
@@ -71,33 +71,33 @@ namespace osu.Game.Rulesets.Diva.UI
                             RelativeSizeAxes = Axes.Both,
                             Children = new Drawable[]
                             {
-                                leftRim = new DrumSegment(DivaAction.Circle)
-                                {
-                                    Anchor = Anchor.BottomCentre,
-                                    Origin = Anchor.BottomRight,
-                                    X = -2,
-                                },
-                                rightRim = new DrumSegment(DivaAction.Cross)
+                                circle = new ArcadeButton(DivaAction.Circle)
                                 {
                                     Anchor = Anchor.BottomCentre,
                                     Origin = Anchor.BottomRight,
                                     X = 2,
                                     Rotation = 90,
                                 },
-                                leftCentre = new DrumSegment(DivaAction.Square)
-                                {
-                                    Anchor = Anchor.BottomCentre,
-                                    Origin = Anchor.BottomRight,
-                                    X = -2,
-                                    Scale = new Vector2(centre_region),
-                                },
-                                rightCentre = new DrumSegment(DivaAction.Triangle)
+                                cross = new ArcadeButton(DivaAction.Cross)
                                 {
                                     Anchor = Anchor.BottomCentre,
                                     Origin = Anchor.BottomRight,
                                     X = 2,
                                     Scale = new Vector2(centre_region),
                                     Rotation = 90,
+                                },
+                                triangle = new ArcadeButton(DivaAction.Triangle)
+                                {
+                                    Anchor = Anchor.BottomCentre,
+                                    Origin = Anchor.BottomRight,
+                                    X = -2,
+                                },
+                                square = new ArcadeButton(DivaAction.Square)
+                                {
+                                    Anchor = Anchor.BottomCentre,
+                                    Origin = Anchor.BottomRight,
+                                    X = -2,
+                                    Scale = new Vector2(centre_region),
                                 }
                             }
                         },
@@ -167,13 +167,13 @@ namespace osu.Game.Rulesets.Diva.UI
 
         private DivaAction getDivaActionFromPosition(Vector2 inputPosition)
         {
-            bool centreHit = leftCentre.Contains(inputPosition) || rightCentre.Contains(inputPosition);
-            bool leftSide = ToLocalSpace(inputPosition).X < DrawWidth / 2;
+            bool centreHit = cross.Contains(inputPosition) || square.Contains(inputPosition);
+            bool rightSide = ToLocalSpace(inputPosition).X > DrawWidth / 2;
 
-            if (leftSide)
-                return centreHit ? leftCentre.Action : leftRim.Action;
+            if (rightSide)
+                return !centreHit ? circle.Action : cross.Action;
 
-            return centreHit ? rightCentre.Action : rightRim.Action;
+            return centreHit ? square.Action : triangle.Action;
         }
 
         protected override void PopIn()
@@ -186,7 +186,7 @@ namespace osu.Game.Rulesets.Diva.UI
             mainContent.FadeOut(300);
         }
 
-        private partial class DrumSegment : CompositeDrawable, IKeyBindingHandler<DivaAction>
+        private partial class ArcadeButton : CompositeDrawable, IKeyBindingHandler<DivaAction>
         {
             private DivaAction action;
 
@@ -212,7 +212,7 @@ namespace osu.Game.Rulesets.Diva.UI
 
             public override bool Contains(Vector2 screenSpacePos) => circle.Contains(screenSpacePos);
 
-            public DrumSegment(DivaAction action)
+            public ArcadeButton(DivaAction action)
             {
                 this.action = action;
 
