@@ -19,6 +19,7 @@ namespace osu.Game.Rulesets.Diva.UI
     [Cached]
 	public partial class DrawableDivaRuleset : DrawableRuleset<DivaHitObject>
     {
+        public new DivaInputManager KeyBindingInputManager => (DivaInputManager)base.KeyBindingInputManager;
         public DrawableDivaRuleset(DivaRuleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null)
             : base(ruleset, beatmap, mods)
         {
@@ -43,5 +44,11 @@ namespace osu.Game.Rulesets.Diva.UI
         }
 
         protected override PassThroughInputManager CreateInputManager() => new DivaInputManager(Ruleset?.RulesetInfo);
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            KeyBindingInputManager.Add(new DivaTouchInputArea());
+        }
     }
 }

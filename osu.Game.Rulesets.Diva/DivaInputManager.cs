@@ -2,11 +2,13 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.ComponentModel;
+using osu.Framework.Allocation;
 using osu.Framework.Input.Bindings;
 using osu.Game.Rulesets.UI;
 
 namespace osu.Game.Rulesets.Diva
 {
+    [Cached]
     public partial class DivaInputManager : RulesetInputManager<DivaAction>
     {
         public DivaInputManager(RulesetInfo ruleset)

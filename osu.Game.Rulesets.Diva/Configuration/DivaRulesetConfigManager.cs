@@ -22,6 +22,7 @@ namespace osu.Game.Rulesets.Diva.Configuration
     public enum DivaRulesetSettings
     {
         UseXBoxButtons,
-        EnableVisualBursts
+        EnableVisualBursts,
+        TouchControlScheme,
     }
 }
