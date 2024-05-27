@@ -42,11 +42,11 @@ namespace osu.Game.Rulesets.Diva.UI
         private readonly Bindable<DivaTouchControlScheme> configTouchControlScheme = new Bindable<DivaTouchControlScheme>();
 
         [BackgroundDependencyLoader]
-        private void load(DivaInputManager taikoInputManager, DivaRulesetConfigManager config)
+        private void load(DivaInputManager divaInputManager, DivaRulesetConfigManager config)
         {
-            Debug.Assert(taikoInputManager.KeyBindingContainer != null);
+            Debug.Assert(divaInputManager.KeyBindingContainer != null);
 
-            keyBindingContainer = taikoInputManager.KeyBindingContainer;
+            keyBindingContainer = divaInputManager.KeyBindingContainer;
 
             // Container should handle input everywhere.
             RelativeSizeAxes = Axes.Both;
