@@ -131,13 +131,13 @@ namespace osu.Game.Rulesets.Diva.UI
         {
             Show();
 
-            DivaAction taikoAction = getDivaActionFromPosition(position);
+            DivaAction divaAction = getDivaActionFromPosition(position);
 
             // Not too sure how this can happen, but let's avoid throwing.
-            if (!trackedActions.TryAdd(source, taikoAction))
+            if (!trackedActions.TryAdd(source, divaAction))
                 return;
 
-            keyBindingContainer.TriggerPressed(taikoAction);
+            keyBindingContainer.TriggerPressed(divaAction);
         }
 
         private void handleUp(object source)
