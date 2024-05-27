@@ -127,25 +127,6 @@ namespace osu.Game.Rulesets.Diva.UI
             base.OnTouchUp(e);
         }
 
-        private static DivaAction[] getOrderedActionsForScheme(DivaTouchControlScheme scheme)
-        {
-            switch (scheme)
-            {
-                case DivaTouchControlScheme.Arcade:
-                    return new[]
-                    {
-                        // dousureba ii?
-                        DivaAction.Circle,
-                        DivaAction.Cross,
-                        DivaAction.Square,
-                        DivaAction.Triangle
-                    };
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(scheme), scheme, null);
-            }
-        }
-
         private void handleDown(object source, Vector2 position)
         {
             Show();
