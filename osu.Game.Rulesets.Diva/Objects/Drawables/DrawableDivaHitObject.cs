@@ -24,8 +24,10 @@ using osu.Game.Rulesets.Objects;
 
 namespace osu.Game.Rulesets.Diva.Objects.Drawables
 {
-	public partial class DrawableDivaHitObject : DrawableHitObject<DivaHitObject>, IKeyBindingHandler<DivaAction>
+    public partial class DrawableDivaHitObject : DrawableHitObject<DivaHitObject>, IKeyBindingHandler<DivaAction>
     {
+        public const float BASE_SIZE = 56;
+
         private const double time_preempt = 850;
         private const double time_fadein = 300;
         private const double time_action = 150;
@@ -48,11 +50,10 @@ namespace osu.Game.Rulesets.Diva.Objects.Drawables
         public DrawableDivaHitObject(DivaHitObject hitObject)
             : base(hitObject)
         {
-            Size = new Vector2(80);
+            Size = new Vector2(BASE_SIZE);
 
             Origin = Anchor.Centre;
             Position = hitObject.Position;
-            Scale = new Vector2(0.7f);
 
             AddRangeInternal(new Sprite[]
             {
@@ -96,30 +97,9 @@ namespace osu.Game.Rulesets.Diva.Objects.Drawables
 
             approachPiece.Texture = textures.Get($"{textureLocation}{validAction.ToString()}Move");
             approachHand.Texture = textures.Get("hand");
-
         }
 
         protected virtual string GetTextureLocation() => (useXB.Value) ? "XB/" : "";
-
-        public override double LifetimeStart
-        {
-            get => base.LifetimeStart;
-            set
-            {
-                base.LifetimeStart = value;
-            }
-        }
-        public override double LifetimeEnd
-        {
-            get
-            {
-                return base.LifetimeEnd;
-            }
-            set
-            {
-                base.LifetimeEnd = value;
-            }
-        }
 
         public override IEnumerable<HitSampleInfo> GetSamples() => new[]
         {
@@ -177,15 +157,14 @@ namespace osu.Game.Rulesets.Diva.Objects.Drawables
             {
                 case ArmedState.Hit:
 
-
                     if (enableVisualBursts.Value)
-                        this.ScaleTo(1.5f, 1500, Easing.OutQuint).FadeOut(1500, Easing.OutQuint).Expire();
+                        this.ScaleTo(2f, 1500, Easing.OutQuint).FadeOut(1500, Easing.OutQuint).Expire();
                     break;
 
                 case ArmedState.Miss:
                     const double duration = 1000;
 
-                    this.ScaleTo(0.8f, duration, Easing.OutQuint);
+                    this.ScaleTo(1.1f, duration, Easing.OutQuint);
                     this.MoveToOffset(new Vector2(0, 10), duration, Easing.In);
                     this.FadeColour(Color4.Red.Opacity(0.5f), duration / 2, Easing.OutQuint).Then().FadeOut(duration / 2, Easing.InQuint).Expire();
                     break;
@@ -206,7 +185,15 @@ namespace osu.Game.Rulesets.Diva.Objects.Drawables
             if (Judged)
                 return false;
 
-            validPress = e.Action == validAction;
+            var action = e.Action switch
+            {
+                DivaAction.Right => DivaAction.Circle,
+                DivaAction.Down => DivaAction.Cross,
+                DivaAction.Up => DivaAction.Triangle,
+                DivaAction.Left => DivaAction.Square,
+                _ => e.Action,
+            };
+            validPress = action == validAction;
             pressed = true;
 
             return true;
